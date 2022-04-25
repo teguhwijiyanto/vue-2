@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <br>
-                    <button class="btn-clear" style="">Clear</button>   
+                    <button class="btn-clear" style=""  v-on:click="resetOptions">Clear</button>   
                     <br>
                </form>
             </div>
@@ -71,7 +71,7 @@
 
       <div class="leftcolumn">
 
-          <div class="card" v-for="post in posts" :key="post.id" style="">
+          <div class="card" v-for="post in filteredPosts" :key="post.id" style="">
           
               <div class="container2">
                 <div class="badge2">
@@ -123,19 +123,31 @@
 export default {
   data() {
     return {
+      search: "",
       posts: []
     };
   },
   methods: {
     fetchPosts() {
-      fetch("http://localhost/applicant_test.json")
+      /*fetch("http://localhost/applicant_test.json")*/
       /*fetch("https://public.connectnow.org.uk/applicant-test/")*/
+      fetch("https://jsonkeeper.com/b/V05K")
         .then(response => response.json())
         .then(data => (this.posts = data));
-    }
+    },
+    resetOptions: function () {
+    this.search='none';
+  }
   },
   mounted() {
     this.fetchPosts();
+  },
+  computed: {
+    filteredPosts() {
+      return this.posts.filter(post =>
+        post.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    }
   }
 };
 </script>
